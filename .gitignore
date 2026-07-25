@@ -136,7 +136,7 @@ cython_debug/
 # Ignore vscode settings
 .vscode
 
-# Project specific 
+# Project specific
 # data
 .mat
 .DS_Store
@@ -145,3 +145,5 @@ cython_debug/
 *.sqlite
 *.csv
 .idea
+
+

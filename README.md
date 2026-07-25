@@ -1,92 +1,89 @@
-# Analysis of the Relationship Between Weather Conditions and Traffic Offense Frequencies
+# Weather vs. Traffic-Offense Correlation — Bonn 2022
 
-## Project Overview
-This study investigates the correlation between weather conditions and road speed limits within the Bonn city area. Additionally, it examines instances of traffic fines resulting from exceeding speed limits, exploring their relationship with temperature, wind, and precipitation on specific dates throughout the year 2022, spanning from January to December.
+End-to-end ETL pipeline that analyzes whether weather conditions relate to speeding-offense frequencies in Bonn, Germany. Modular extract/transform/load over two live data sources (NASA POWER + Bonn Open Data), persisted to SQLite, with a pytest suite and GitHub Actions CI.
 
-## Project Structure
+## Key findings
+
+Across 2022, daily speeding offenses in Bonn correlate most strongly (positively) with **temperature**, and inversely with **wind speed**:
+
+| Weather parameter | Correlation with offenses | Reading |
+|---|---|---|
+| Temperature (T2M) | **+0.38** | moderate — more offenses in warmer weather |
+| Dew point (T2MDEW) | +0.27 | slight positive |
+| Specific humidity (QV2M) | +0.26 | slight positive |
+| Surface pressure (PS) | +0.04 | negligible |
+| Precipitation (PRECTOTCORR) | −0.08 | weak — slightly fewer offenses when raining |
+| Wind direction (WD10M) | −0.18 | slight negative |
+| Wind speed (WS10M) | −0.24 | fewer offenses on windier days |
+
+Offense counts peak in Q3 (July–September), highest in September — tracking the warmest part of the year. Correlation is not causation: unmodeled factors such as traffic volume and road conditions likely matter too. Full write-up, charts, and caveats are in **[report.ipynb](report.ipynb)**.
+
+## The question
+
+Do weather conditions — temperature, wind, precipitation — relate to how often drivers are fined for speeding? Using a full year of daily data for Bonn (2022), this project builds a reproducible pipeline that joins weather with offense records and measures the relationship.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[NASA POWER API<br/>daily weather] --> C[Transform<br/>clean · reshape · merge on date]
+    B[Bonn Open Data<br/>speeding-fines CSV] --> C
+    C --> D[(SQLite<br/>weather_traffic_fines)]
+    D --> E[Analysis<br/>report.ipynb]
+```
+
+- **Extract** — `power_api.py` (NASA POWER weather), `mobilithek.py` (Bonn Open Data traffic fines). Each source has remote and local variants behind a small common interface.
+- **Transform** — parse dates, aggregate daily offense counts, and merge weather with traffic on date.
+- **Load** — write the merged table to SQLite.
+- **Orchestrate** — `pipeline.py` wires Extractor → Transformer → Loader.
+
+## Tech stack
+
+Python 3.11 · pandas · SQLite · Requests · PyYAML · pytest · GitHub Actions
+
+## Run it
+
 ```bash
-├───examples
-│       data-exploration-example.ipynb
-│       final-report-example.ipynb
-│       project-plan-example.md
-│
-├───exercises
-│       exercise1.py
-│       exercise2.jv
-│       exercise3.py
-│
-└───project
-    │   exploration.ipynb
-    │   pipeline.sh
-    │   project-plan.md
-    │   report.ipynb
-    │   requirements.txt
-    │   tests.sh
-    │
-    ├───data
-    │       .gitkeep
-    │
-    ├───data_pipeline
-    │   │   config.yaml
-    │   │   extract.py
-    │   │   load.py
-    │   │   mobilithek.py
-    │   │   pipeline.py
-    │   │   power_api.py
-    │   │   transform.py
-    │   │   __init__.py
-    │   │
-    │   
-    └───tests
-        │   test_extractor.py
-        │   test_loader.py
-        │   test_pipeline.py
-        │   test_transformer.py
-        │   __init__.py
-```
-## Key project files and their functions:
-* `project/pipeline.sh`: It will run an automated ETL pipeline that creates a SQLite database named analysis.sqlite that contains required data.
-* `project/tests.sh` : It will run the test cases for the ETL pipeline.
-
-## Project Setup
-
-1. Clone the repository:
-
-```
 git clone git@github.com:shuvanon/weather-traffic-etl.git
-```
+cd weather-traffic-etl
 
-2. Create a virtual environment:
+python3.11 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 
-```
-python3.11 -m venv <env_name>
-```
-
-3. Activate the virtual environment:
-
-```
-source <env_name>/bin/activate
-``` 
-
-4. Install requirements:
-
-```
 pip install -r requirements.txt
+
+bash pipeline.sh                   # or: python -m data_pipeline.pipeline
+# → writes data/data.sqlite (table: weather_traffic_fines)
+
+bash tests.sh                      # or: pytest tests
 ```
 
-5. Run data pipeline
+> Run the commands from the repository root. The pipeline fetches live data from the NASA POWER and Bonn Open Data endpoints, so a network connection is required.
+
+## Project structure
+
 ```
-python //data_pipeline/pipeline.py
+.
+├── data_pipeline/
+│   ├── config.yaml        # location, date range, API parameters
+│   ├── extract.py         # Extractor: orchestrates the two sources
+│   ├── power_api.py       # NASA POWER weather client
+│   ├── mobilithek.py      # Bonn Open Data traffic client
+│   ├── transform.py       # date parsing, daily aggregation, merge
+│   ├── load.py            # SQLite loader
+│   └── pipeline.py        # Extract → Transform → Load
+├── tests/                 # pytest: extractor, transformer, loader, pipeline
+├── data/                  # SQLite output (gitignored)
+├── report.ipynb           # analysis, charts, conclusions
+├── exploration.ipynb      # data exploration
+├── pipeline.sh
+└── tests.sh
 ```
 
-6. Run Test
-```
-pytest -r project/tests
-```
+## Testing & CI
 
+`pytest` covers the extractor, transformer, loader, and the end-to-end pipeline. GitHub Actions runs the suite on every push to `main`.
 
-## Analysis Report
+---
 
-The motivation behind this study is to explore whether specific weather parameters can be indicators or contributors to changes in the number of traffic offences, thereby aiding in better traffic management and safety measures. The analysis revealed notable correlations between several weather parameters and traffic offence frequencies.
-
-Explore the detailed analysis report [here](https://github.com/shuvanon/made-template-ws2324/blob/main/project/report.ipynb).
+<sub>Originally built for the <em>Methods of Advanced Data Engineering</em> course at FAU Erlangen-Nürnberg.</sub>

@@ -4,22 +4,13 @@ on:
   push:
     branches:
       - main
-    paths:
-      - project/**
 
 jobs:
   pipeline-test:
     runs-on: ubuntu-latest
-    env:
-      WORKING_DIR: ./project
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Set up Node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 'lts/*'
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -27,13 +18,10 @@ jobs:
         python-version: 3.11
 
     - name: Install Python dependencies
-      working-directory: ${{ env.WORKING_DIR }}
       run: pip install -r requirements.txt
 
     - name: Grant executable permissions to tests.sh
-      run: chmod +x ./project/tests.sh
-    
+      run: chmod +x ./tests.sh
+
     - name: Run tests
-      working-directory: ${{ env.WORKING_DIR }}
-      run: |
-        ./tests.sh
+      run: ./tests.sh
