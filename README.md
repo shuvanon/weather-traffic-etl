@@ -53,7 +53,7 @@ This study investigates the correlation between weather conditions and road spee
 1. Clone the repository:
 
 ```
-git clone git@github.com:shuvanon/made-template-ws2324.git
+git clone git@github.com:shuvanon/weather-traffic-etl.git
 ```
 
 2. Create a virtual environment:
