@@ -55,7 +55,7 @@ pip install -r requirements.txt
 bash pipeline.sh                   # or: python -m data_pipeline.pipeline
 # → writes data/data.sqlite (table: weather_traffic_fines)
 
-bash tests.sh                      # or: pytest tests
+bash tests.sh                      # fast, network-free unit tests (or: pytest -m "not integration")
 ```
 
 > Run the commands from the repository root. The pipeline fetches live data from the NASA POWER and Bonn Open Data endpoints, so a network connection is required.
@@ -82,7 +82,13 @@ bash tests.sh                      # or: pytest tests
 
 ## Testing & CI
 
-`pytest` covers the extractor, transformer, loader, and the end-to-end pipeline. GitHub Actions runs the suite on every push to `main`.
+Fast, **network-free unit tests** cover the transformer, loader, request building, and a full extract→transform→load run against committed CSV fixtures — no external calls, so they're deterministic and run in CI on every push to `main`.
+
+A separate set of **live integration tests** (marked `integration`) exercises the real NASA POWER and Bonn Open Data endpoints. They're deselected by default; run them on demand with:
+
+```bash
+pytest -m integration
+```
 
 ---
 

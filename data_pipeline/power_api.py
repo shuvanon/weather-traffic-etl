@@ -56,6 +56,8 @@ class PowerAPIRemote(PowerAPI):
 class PowerAPILocal(PowerAPI):
     def __init__(self, path) -> None:
         self.path = path
-    
+
     def get_data(self):
-        return pd.read_csv(self.path, delimiter=";")
+        # Mirror PowerAPIRemote.get_data(): a date-indexed frame with one
+        # column per parameter (the first CSV column holds the dates).
+        return pd.read_csv(self.path, delimiter=";", index_col=0)

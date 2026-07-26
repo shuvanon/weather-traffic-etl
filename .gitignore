@@ -146,4 +146,7 @@ cython_debug/
 *.csv
 .idea
 
+# Keep the committed test fixtures (exception to the *.csv rule above)
+!tests/fixtures/*.csv
+
 
