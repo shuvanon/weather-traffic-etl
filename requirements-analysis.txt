@@ -3,6 +3,6 @@
 -r requirements.txt
 matplotlib==3.11.1
 seaborn==0.13.2
-scikit-learn==1.9.0
+scipy==1.17.1
 SQLAlchemy==2.0.51
 jupyterlab
