@@ -13,7 +13,7 @@ Across 2022, daily speeding offenses in Bonn correlate most strongly (positively
 | Specific humidity (QV2M) | +0.26 | slight positive |
 | Surface pressure (PS) | +0.04 | negligible |
 | Precipitation (PRECTOTCORR) | −0.08 | weak — slightly fewer offenses when raining |
-| Wind direction (WD10M) | −0.18 | slight negative |
+| Wind direction (WD10M) | −0.12 | slight negative |
 | Wind speed (WS10M) | −0.24 | fewer offenses on windier days |
 
 Offense counts peak in Q3 (July–September), highest in September — tracking the warmest part of the year. Correlation is not causation: unmodeled factors such as traffic volume and road conditions likely matter too. Full write-up, charts, and caveats are in **[report.ipynb](report.ipynb)**.

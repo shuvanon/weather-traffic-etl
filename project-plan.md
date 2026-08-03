@@ -1,7 +1,7 @@
 # Project Plan
 
 ## Title
-The Exploring the Intersection of Weather Conditions and Road Speed Limits
+Exploring the Relationship Between Weather Conditions and Traffic Offences in Bonn (2022)
 
 
 ## Main Question
@@ -16,7 +16,7 @@ The Exploring the Intersection of Weather Conditions and Road Speed Limits
 
 <!-- Describe your data science project in max. 200 words. Consider writing about why and how you attempt it. -->
 
-This study investigates the correlation between weather conditions and speed limits on roads within the Bonn city area. Additionally, it examines instances of traffic fines resulting from exceeding speed limits, exploring their relationship with temperature, wind, and precipitation on specific dates throughout the year 2022, spanning from January to December.
+This study investigates the correlation between weather conditions and speeding offences within the Bonn city area. It examines instances of traffic fines resulting from exceeding speed limits, exploring their relationship with temperature, wind, and precipitation on specific dates throughout the year 2022, spanning from January to December.
 
 
 ## Datasources
@@ -31,8 +31,9 @@ This study investigates the correlation between weather conditions and speed lim
 
 ### Datasource2: NASA Prediction Of Worldwide Energy Resources
 * Metadata URL: https://power.larc.nasa.gov/data-access-viewer
-* Data URL: https://power.larc.nasa.gov/data-access-viewer
-* Data Type: CSV
+* Data URL: https://power.larc.nasa.gov/api/temporal/daily/point
+* Data Type: JSON (NASA POWER API)
+
 This weather dataset is generated from the POWER project using the following options:
 * Date: Jan 01, 2022 to Dec 31, 2022
 * Temporal: Daily
@@ -42,8 +43,8 @@ This weather dataset is generated from the POWER project using the following opt
 
 ## Work Packages
 
-<!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
-
-1. 
-
-[i1]: https://github.com/jvalue/made-template/issues/1
+1. Acquire the two data sources — NASA POWER daily weather and the Bonn "speeding fines 2022" open dataset.
+2. Build an ETL pipeline that extracts, cleans, merges the datasets on date, and loads them into a SQLite database.
+3. Explore the data — distributions and seasonal trends — in `exploration.ipynb`.
+4. Analyse the correlation between weather parameters and traffic-offence frequencies, and write up the findings in `report.ipynb`.
+5. Add automated tests and continuous integration for the pipeline.

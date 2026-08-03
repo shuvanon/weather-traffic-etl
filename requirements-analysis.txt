@@ -1,0 +1,8 @@
+# Dependencies for running the analysis notebooks (exploration.ipynb, report.ipynb).
+#   pip install -r requirements-analysis.txt
+-r requirements.txt
+matplotlib==3.11.1
+seaborn==0.13.2
+scikit-learn==1.9.0
+SQLAlchemy==2.0.51
+jupyterlab
