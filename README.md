@@ -6,15 +6,7 @@ End-to-end ETL pipeline that analyzes whether weather conditions relate to speed
 
 Across 2022, daily speeding offenses in Bonn correlate most strongly (positively) with **temperature**, and inversely with **wind speed**:
 
-| Weather parameter | Correlation with offenses | Reading |
-|---|---|---|
-| Temperature (T2M) | **+0.38** | moderate — more offenses in warmer weather |
-| Dew point (T2MDEW) | +0.27 | slight positive |
-| Specific humidity (QV2M) | +0.26 | slight positive |
-| Surface pressure (PS) | +0.04 | negligible |
-| Precipitation (PRECTOTCORR) | −0.08 | weak — slightly fewer offenses when raining |
-| Wind direction (WD10M) | −0.12 | slight negative |
-| Wind speed (WS10M) | −0.24 | fewer offenses on windier days |
+![Diverging bar chart: Pearson correlation of seven daily weather parameters with speeding-offence frequency, Bonn 2022. Temperature +0.38 (strongest positive), dew point +0.27, specific humidity +0.26, surface pressure +0.04, precipitation -0.08, wind direction -0.12, wind speed -0.24 (strongest negative).](assets/correlation.png)
 
 Offense counts peak in Q3 (July–September), highest in September — tracking the warmest part of the year. Correlation is not causation: unmodeled factors such as traffic volume and road conditions likely matter too. Full write-up, charts, and caveats are in **[report.ipynb](report.ipynb)**.
 
