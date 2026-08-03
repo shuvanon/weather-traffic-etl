@@ -1,0 +1,5 @@
+# Exclude the analysis notebooks from GitHub's language statistics.
+# By byte size they are ~95% embedded chart images, which otherwise reports the
+# repository as 99% "Jupyter Notebook" and hides the Python pipeline.
+# The notebooks still render normally on GitHub.
+*.ipynb linguist-documentation
